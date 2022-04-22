@@ -3,6 +3,7 @@ import { Text, View, Button } from 'react-native'
 import { styles } from '../theme/appTheme';
 import { StackScreenProps } from '@react-navigation/stack'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useEffect } from 'react';
 
 interface Props extends StackScreenProps<any,any>{};
@@ -35,10 +36,12 @@ export const Pagina1Screen = ({navigation}:Props) => {
 
           <View style={{flexDirection:'row'}}>
             <TouchableOpacity style={{...styles.botongrande, backgroundColor:'#5856D6'}} onPress={ () => navigation.navigate('Persona', {id:1 ,nombre:'Pedro'})}>
+                <Icon name='man-outline' size={45} color='white' />
                 <Text style={styles.botongrandetexto}>Pedro</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{...styles.botongrande, backgroundColor:'#FF9427'}} onPress={ () => navigation.navigate('Persona', {id:2 ,nombre:'Maraia'})}>
+            <TouchableOpacity style={{...styles.botongrande, backgroundColor:'#FF9427'}} onPress={ () => navigation.navigate('Persona', {id:2 ,nombre:'Maria'})}>
+                <Icon name='woman-outline' size={45} color='white' />
                 <Text style={styles.botongrandetexto}>Maria</Text>
             </TouchableOpacity>
           </View>
