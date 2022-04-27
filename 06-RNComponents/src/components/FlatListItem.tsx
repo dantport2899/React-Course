@@ -3,19 +3,30 @@ import { View, Text, StyleSheet } from 'react-native';
 import { MenuItem } from '../interfaces/appInterfaces';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParams } from '../navigator/Navigator';
 
 
 interface Props{
     menuItem: MenuItem
 }
 
+type HomeScreenProps = StackNavigationProp<RootStackParams, 'HomeScreen'>;
+
+
 export const FlatListItem = ({menuItem}:Props) => {
+
+    const navigation = useNavigation<HomeScreenProps>();
+
   return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={()=> navigation.navigate(menuItem.component as any)}
+      >
             <View style={styles.container}>
                     <Icon
                         name={menuItem.icon}
-                        color='gray'
+                        color='red'
                         size={23}
                     />
                     <Text style={styles.itemText}>{menuItem.name}</Text>
@@ -24,7 +35,7 @@ export const FlatListItem = ({menuItem}:Props) => {
 
                     <Icon
                         name='arrow-forward-outline'
-                        color='gray'
+                        color='red'
                         size={23}
                     />        
             </View>
