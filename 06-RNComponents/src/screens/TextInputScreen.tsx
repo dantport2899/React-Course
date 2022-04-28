@@ -1,28 +1,26 @@
 import React from 'react'
-import { View, TextInput, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, TextInput, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Text } from 'react-native';
 import { HeaderTitle } from '../components/HeaderTitle'
 import { styles } from '../theme/AppTheme';
 import { useState } from 'react';
+import { useForm } from '../hooks/UseForm';
+import { CustomSwitch } from '../components/CustomSwitch';
 
 export const TextInputScreen = () => {
-    const [form, setform] = useState({
-        name:'',
-        email:'',
-        phone:''
+    
+    const {form,onChange,isSubscribe} = useForm({
+            name:'',
+            email:'',
+            phone:'',
+            isSubscribe:false
     });
-
-    const onChange = (value:string,field:string) => {
-        setform({
-            ...form,
-            [field]:value
-        })
-    } 
 
   return (
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <ScrollView>
+
             <View style={styles.globalmargin}>
                 <HeaderTitle title='TextInputs'/>
 
@@ -43,9 +41,12 @@ export const TextInputScreen = () => {
 
                 />
 
-                <HeaderTitle title={JSON.stringify(form,null,3)}/>
-                <HeaderTitle title={JSON.stringify(form,null,3)}/>
+                <View style={stylesscreen.switchRow}>
+                    <Text style={stylesscreen.switchtext}>Suscribirse</Text>
+                    <CustomSwitch isOn={isSubscribe} onChange={(value)=>onChange(value,'isSubscribe')}/>
+                </View>
 
+                <HeaderTitle title={JSON.stringify(form,null,3)}/>
 
                 <TextInput
                     style={stylesscreen.inputStyle}
@@ -69,5 +70,15 @@ const stylesscreen = StyleSheet.create({
         paddingHorizontal:10,
         borderRadius:10,
         marginVertical:10
+    },
+    switchRow:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        marginVertical:10
+
+    },
+    switchtext:{
+        fontSize:25
     }
 });

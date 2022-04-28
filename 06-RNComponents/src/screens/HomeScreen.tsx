@@ -5,19 +5,12 @@ import {styles}  from '../theme/AppTheme';
 import { FlatListItem } from '../components/FlatListItem';
 import { menuItems } from '../data/menuItems';
 import { HeaderTitle } from '../components/HeaderTitle';
+import { ItemSeparator } from '../components/ItemSeparator';
 
 
 
 
 export const HomeScreen = () => {
-
-
-    const itemSeparator = ()=>{
-        return(
-            <View style={{borderBottomWidth:1, marginTop:5, marginBottom:5}}>
-            </View>
-        )
-    }
 
   return (
     <View style={{flex:1, ...styles.globalmargin}}>
@@ -29,7 +22,7 @@ export const HomeScreen = () => {
                 renderItem={ ({ item }) => <FlatListItem menuItem={item}/>}
                 keyExtractor={(item)=>item.name}
                 ListHeaderComponent={()=><HeaderTitle title='Opciones de Menu'/>}
-                ItemSeparatorComponent={()=>itemSeparator()}
+                ItemSeparatorComponent={()=><ItemSeparator/>}
             />
     </View>
   )
