@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, Text, StyleSheet } from 'react-native';
 import { MenuItem } from '../interfaces/appInterfaces';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParams } from '../navigator/Navigator';
+import { ThemeContext } from '../context/themeContext/ThemeContext';
 
 
 interface Props{
@@ -18,6 +19,9 @@ type HomeScreenProps = StackNavigationProp<RootStackParams, 'HomeScreen'>;
 export const FlatListItem = ({menuItem}:Props) => {
 
     const navigation = useNavigation<HomeScreenProps>();
+    // const {colors} = useTheme();
+    const {theme:{colors}} = useContext(ThemeContext);
+    
 
   return (
       <TouchableOpacity
@@ -26,16 +30,20 @@ export const FlatListItem = ({menuItem}:Props) => {
             <View style={styles.container}>
                     <Icon
                         name={menuItem.icon}
-                        color='red'
+                        color={colors.primary}
                         size={23}
                     />
-                    <Text style={styles.itemText}>{menuItem.name}</Text>
+                    <Text style={{
+                        ...styles.itemText,
+                        color:colors.text
+                        // color:colors.text
+                    }}>{menuItem.name}</Text>
 
                     <View style={{flex:1}}/>
 
                     <Icon
                         name='arrow-forward-outline'
-                        color='red'
+                        color={colors.primary}
                         size={23}
                     />        
             </View>
@@ -50,6 +58,6 @@ const styles = StyleSheet.create({
     },
     itemText:{
         marginLeft:5,
-         fontSize:18
+        fontSize:18,
     }
 });

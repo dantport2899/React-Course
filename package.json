@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@types/react-native-snap-carousel": "^3.8.5",
     "currency-formatter": "^1.5.9",
     "react-native-vector-icons": "^9.1.0"
   },
