@@ -1,11 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SearchScreen } from '../screens/SearchScreen';
-import { StackNavigator } from './StackNavigator';
-import { styles } from '../../../04-navegacionApp/src/theme/appTheme';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Tab2Screen } from './Tab2';
+import { StackNavigator } from './StackNavigator';
 
 const Tab = createBottomTabNavigator();
+
 
 export const Tabs = () => {
   return (
@@ -42,7 +42,7 @@ export const Tabs = () => {
       />
       <Tab.Screen 
         name="Settings" 
-        component={SearchScreen} 
+        component={Tab2Screen} 
         options={{
             tabBarLabel:'Listado',
             tabBarIcon:({color})=> <Icon  name='search-outline' color={color} size={25}/>
