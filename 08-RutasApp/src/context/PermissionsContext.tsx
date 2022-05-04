@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { PermissionStatus, request, PERMISSIONS, check } from 'react-native-permissions';
+import { PermissionStatus, request, PERMISSIONS, check, openSettings } from 'react-native-permissions';
 import { createContext,useState } from 'react';
 import { Platform, AppState } from 'react-native';
 
@@ -24,6 +24,9 @@ export const PermissionsProvider = ({children}:any) => {
     const [permissions, setpermissions] = useState(permissionsInitState);
 
     useEffect(() => {
+
+        checkLocationPermission();
+
         AppState.addEventListener('change', state => {
 
             if(state !== 'active') return;
@@ -40,6 +43,10 @@ export const PermissionsProvider = ({children}:any) => {
 
         }else{
             permissionStatus = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+        }
+
+        if(permissionStatus==='blocked'){
+            openSettings();
         }
 
         setpermissions({
