@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native';
 
 export const ProtectedScreen = () => {
   return (
@@ -10,3 +10,7 @@ export const ProtectedScreen = () => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+    
+});
