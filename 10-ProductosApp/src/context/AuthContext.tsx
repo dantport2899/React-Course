@@ -1,7 +1,7 @@
 import React, { createContext,useReducer } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import cafeApi from '../api/CafeApi';
-import { Usuario, LoginResponse, LoginData } from '../interfaces/app-interfaces';
+import { Usuario, LoginResponse, LoginData, RegisterData } from '../interfaces/app-interfaces';
 import { authReducer, AuthState } from './AuthReducer';
 import { useEffect } from 'react';
 
@@ -10,7 +10,7 @@ type AuthContextProps = {
     token: string | null;
     user: Usuario | null;
     status: 'checking' | 'authenticated' | 'not-authenticated';
-    signUp: ()=> void;
+    signUp: (resgiterData:RegisterData)=> void;
     signIn: (logindata:LoginData)=> void;
     logout: ()=> void;
     removeError: ()=> void;
@@ -36,25 +36,25 @@ useEffect(() => {
 
 const checkToken = async()=>{
 
-    //NO TOKEN, NO AUTENTICADO
-    const token = AsyncStorage.getItem('token');
-    if(!token) return dispatch({type:'notAuthenticated'});
+    const token = await AsyncStorage.getItem('token');
+        
+        // No token, no autenticado
+        if ( !token ) return dispatch({ type: 'notAuthenticated' });
 
-    //HAY TOKEN
-    const resp = await cafeApi.get('/auth');
-    if(resp.status !== 200){
-        return dispatch({type:'notAuthenticated'});
-    }
-
-    await AsyncStorage.setItem('token', resp.data.token);
-
-    dispatch({
-        type:'signUp',
-        payload:{
-            token:resp.data.token,
-            user:resp.data.usuario
+        // Hay token
+        const resp = await cafeApi.get('/auth');
+        if ( resp.status !== 200 ) {
+            return dispatch({ type: 'notAuthenticated' });
         }
-    });
+        
+        await AsyncStorage.setItem('token', resp.data.token );
+        dispatch({ 
+            type: 'signUp',
+            payload: {
+                token: resp.data.token,
+                user: resp.data.usuario
+            }
+        });
 }
 
 
@@ -81,12 +81,34 @@ const signIn = async({correo,password}:LoginData)=> {
     }
 };
 
-const signUp = async()=> {
+const signUp = async({nombre,correo,password}:RegisterData)=> {
+    try {
+        const {data} = await cafeApi.post<LoginResponse>('/usuarios',{correo,password,nombre});
+        dispatch({
+            type:'signUp',
+            payload:{
+                token:data.token,
+                user:data.usuario
+            }
+        });
+
+        await AsyncStorage.setItem('token',data.token);
+
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type:'addError',
+        // @ts-ignore
+            payload:error.response.data || 'Revise la informacion'
+        })
+    }
     
 };
 
 
-const logout = ()=> {
+const logout = async()=> {
+    await AsyncStorage.removeItem('token');
+    dispatch({type:'logout'})
 
 };
 

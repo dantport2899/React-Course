@@ -39,7 +39,8 @@ type AuthAction =
                     token:action.payload.token,
                     user:action.payload.user
                 }
-                
+            
+            case 'logout':
             case 'notAuthenticated':
                 return{
                     ...state,
