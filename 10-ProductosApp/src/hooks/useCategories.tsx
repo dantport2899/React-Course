@@ -16,7 +16,6 @@ export const useCategories = () => {
     const getCategories = async () => {
         const resp = await cafeApi.get<CategoriesResponse>('/categorias');
         setcategories(resp.data.categorias);
-        console.log(resp.data.categorias);
         setisLoading(false);
     }
 
