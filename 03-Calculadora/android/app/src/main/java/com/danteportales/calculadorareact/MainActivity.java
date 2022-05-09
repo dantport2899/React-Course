@@ -1,4 +1,5 @@
-package com.calculadora;
+// package com.calculadora;
+package com.danteportales.calculadorareact;
 import android.os.Bundle; // here
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

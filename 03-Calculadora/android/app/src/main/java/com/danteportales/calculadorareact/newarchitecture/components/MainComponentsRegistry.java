@@ -1,4 +1,5 @@
-package com.calculadora.newarchitecture.components;
+// package com.calculadora.newarchitecture.components;
+package com.danteportales.calculadorareact.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

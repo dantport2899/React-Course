@@ -1,4 +1,5 @@
-package com.calculadora.newarchitecture;
+// package com.calculadora.newarchitecture;
+package com.danteportales.calculadorareact.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +20,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.calculadora.BuildConfig;
-import com.calculadora.newarchitecture.components.MainComponentsRegistry;
-import com.calculadora.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.danteportales.calculadorareact.BuildConfig;
+import com.danteportales.calculadorareact.newarchitecture.components.MainComponentsRegistry;
+import com.danteportales.calculadorareact.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
