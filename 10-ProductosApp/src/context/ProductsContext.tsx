@@ -3,6 +3,7 @@ import { Producto } from '../interfaces/app-Interfaces';
 import { useEffect } from 'react';
 import cafeApi from '../api/CafeApi';
 import { ProductsResponse } from '../interfaces/app-interfaces';
+import { ImagePickerResponse } from 'react-native-image-picker';
 
 type ProductsContextProps = {
     products: Producto[];
@@ -11,7 +12,7 @@ type ProductsContextProps = {
     updateProduct: ( categoryId: string, productName: string, productId: string ) => Promise<void>;
     deleteProduct: ( id: string ) => Promise<void>;
     loadProductById: ( id: string ) => Promise<Producto>;
-    uploadImage: ( data: any, id: string ) => Promise<void>; // TODO: cambiar ANY
+    uploadImage: ( uri: string, name: string, type: string, id: string ) => Promise<void>; // TODO: cambiar ANY
 }
 
 
@@ -68,8 +69,30 @@ export const ProductsProvider = ({ children }: any ) => {
     };
 
     // TODO: cambiar ANY
-    const uploadImage = async( data: any, id: string ) => {
-        
+    const uploadImage = async( uri: string, name: string, type: string, id: string ) => {
+        const fileToUpload = {
+            uri: uri,
+            type: type,
+            name: name,
+        }
+
+        const formData = new FormData();
+        formData.append('archivo',fileToUpload);
+
+        try {
+            const resp = await cafeApi.put('/uploads/productos/'+id, formData,  {
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'multipart/form-data',
+                },
+                transformRequest: () => {
+                  return formData;
+                },
+              });
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return(

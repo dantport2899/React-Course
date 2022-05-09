@@ -1,9 +1,10 @@
 import React from 'react';
 import {Picker} from '@react-native-picker/picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {Text, View, StyleSheet, Button, Image} from 'react-native';
 import {ProductStackParams} from '../navigation/ProductsNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
-import {useEffect, useContext,} from 'react';
+import {useEffect, useContext,useState} from 'react';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import {useCategories} from '../hooks/useCategories';
 import {useForm} from '../hooks/useForm';
@@ -14,9 +15,12 @@ interface Props extends StackScreenProps<ProductStackParams, 'ProductScreen'> {}
 export const ProductScreen = ({route, navigation}: Props) => {
   const {id = '', name = ''} = route.params;
 
+  const [tempUri, settempUri] = useState<string>()
+
   const {categories} = useCategories();
 
-  const {loadProductById,addProduct,updateProduct} = useContext(ProductsContext);
+  const {loadProductById, addProduct, updateProduct,uploadImage} =
+    useContext(ProductsContext);
 
   const {_id, categoriaId, nombre, img, form, onChange, setFormValue} = useForm(
     {
@@ -48,15 +52,58 @@ export const ProductScreen = ({route, navigation}: Props) => {
     });
   };
 
-  const saveOrUpdate = async() => {
-    if (_id.length > 0) {
-      updateProduct(categoriaId,nombre,id);
+  const saveOrUpdate = async () => {
+    if (id.length > 0) {
+      updateProduct(categoriaId, nombre, id);
     } else {
-
-      const tempcategoriaId = categoriaId || categories[0]._id
-      const newProduct = await addProduct(categoriaId,nombre);
+      const tempCategoriaId = categoriaId || categories[0]._id;
+      const newProduct = await addProduct(tempCategoriaId, nombre);
       onChange(newProduct._id, '_id');
     }
+  };
+
+  const takePhoto = () => {
+    launchCamera(
+      {
+        mediaType: 'photo',
+        quality: 0.5,
+      },
+      resp => {
+        if(resp.didCancel) return;
+
+        if (!resp.assets?.[0].uri) return
+        settempUri(resp.assets?.[0].uri)
+
+        if (resp.assets) {
+          const fileName = (resp.assets[0].fileName) ? resp.assets[0].fileName : 'foto.jpg';
+          const type = (resp.assets[0].type) ? resp.assets[0].type : 'image/jpeg';
+
+          uploadImage(resp.assets[0].uri, fileName, type, _id);
+      }
+      },
+    );
+  };
+
+  const takeGaleryPhoto = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        quality: 0.5,
+      },
+      resp => {
+        if(resp.didCancel) return;
+
+        if (!resp.assets?.[0].uri) return
+        settempUri(resp.assets?.[0].uri)
+
+        if (resp.assets) {
+          const fileName = (resp.assets[0].fileName) ? resp.assets[0].fileName : 'foto.jpg';
+          const type = (resp.assets[0].type) ? resp.assets[0].type : 'image/jpeg';
+          
+          uploadImage(resp.assets[0].uri, fileName, type, _id);
+      }
+      },
+    );
   };
 
   return (
@@ -89,17 +136,17 @@ export const ProductScreen = ({route, navigation}: Props) => {
               marginTop: 10,
               marginBottom: 20,
             }}>
-            <Button title="Camara" onPress={() => {}} color="#5856D6" />
+            <Button title="Camara" onPress={takePhoto} color="#5856D6" />
 
             <View style={{width: 10}}></View>
 
-            <Button title="Galeria" onPress={() => {}} color="#5856D6" />
+            <Button title="Galeria" onPress={takeGaleryPhoto} color="#5856D6" />
           </View>
         )}
 
         <Button title="Guardar" onPress={saveOrUpdate} color="#5856D6" />
 
-        {img.length > 0 && (
+        { (img.length > 0 && !tempUri) && (
           <Image
             source={{uri: img}}
             style={{width: '100%', height: 300, marginTop: 20}}
@@ -107,6 +154,15 @@ export const ProductScreen = ({route, navigation}: Props) => {
         )}
 
         {/* Imagen Temporal */}
+
+
+        {(tempUri) && (
+          <Image
+            source={{uri: tempUri}}
+            style={{width: '100%', height: 300, marginTop: 20}}
+          />
+        )}
+
       </ScrollView>
     </View>
   );
